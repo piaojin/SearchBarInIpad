@@ -42,8 +42,6 @@ if let searchNavigationController = storyboard.instantiateViewController(withIde
 ```
 ### 注意：该种方案只适合present到一个带有navigationController的viewController
 
-### 记住设置searchBar布局约束时***要以safe area为基准***
-
 ![](https://note.youdao.com/yws/api/personal/file/WEBd5a08062034deaf2c24a31958bc2441b?method=download&shareKey=f4e151c8aadf16916ebed3114c949ddb)
 
 
@@ -117,5 +115,3 @@ override func viewDidDisappear(_ animated: Bool) {
         }
     }
 ```
-
-#### 不过这种方式在界面切换时会有UI小问题，可以到我的gitHub去下个我的小demo看看.
