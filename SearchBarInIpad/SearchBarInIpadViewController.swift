@@ -55,24 +55,6 @@ class SearchBarInIpadViewController: UIViewController {
         self.initView()
         self.initData()
     }
-    
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        if !self.searchBar.isHidden {
-            UIView.animate(withDuration: 0.3, animations: {
-                self.searchBar.isHidden = true
-            })
-        }
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        if self.searchBar.isHidden {
-            UIView.animate(withDuration: 0.3, animations: {
-                self.searchBar.isHidden = false
-            })
-        }
-    }
 
     @objc func cancelAction() {
         self.navigationController?.popViewController(animated: true)
@@ -107,27 +89,9 @@ class SearchBarInIpadViewController: UIViewController {
             self.navigationItem.leftBarButtonItem = backlButtonItem
             
             if let navigationBarButtonFrame = self.navigationController?.navigationBar.frame {
-                self.searchBar.alpha = 0.0
-                
-                CATransaction.begin()
-                
-                CATransaction.setCompletionBlock({
-                    DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.25, execute: {
-                        UIView.animate(withDuration: 0.4, animations: {
-                            self.searchBar.alpha = 1.0
-                        })
-                    })
-                })
-                
-                UIView.animate(withDuration: 0.1, animations: {
-                    self.searchBar.frame = CGRect(x: self.backButton.frame.size.width + 30.0, y: (navigationBarButtonFrame.size.height - self.cancelButton.frame.size.height) / 2.0, width: navigationBarButtonFrame.size.width - self.cancelButton.frame.size.width - self.backButton.frame.size.width - 60.0, height: self.cancelButton.frame.size.height)
-                    self.navigationController?.navigationBar.addSubview(self.searchBar)
-                })
-                
-                CATransaction.commit()
+                self.searchBar.frame = CGRect(x: self.backButton.frame.size.width + 30.0, y: (navigationBarButtonFrame.size.height - self.cancelButton.frame.size.height) / 2.0, width: navigationBarButtonFrame.size.width - self.cancelButton.frame.size.width - self.backButton.frame.size.width - 60.0, height: self.cancelButton.frame.size.height)
+                self.navigationItem.titleView = self.searchBar
             }
-        } else {
-            self.navigationItem.rightBarButtonItem = nil
         }
         
         self.view.addSubview(self.tableView)
@@ -146,10 +110,6 @@ class SearchBarInIpadViewController: UIViewController {
         self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: NSStringFromClass(UITableViewCell.self))
         self.tableView.delegate = self
         self.tableView.dataSource = self
-    }
-    
-    deinit {
-        self.searchBar.removeFromSuperview()
     }
 }
 
