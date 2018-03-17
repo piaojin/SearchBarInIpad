@@ -26,7 +26,7 @@ override func viewWillAppear(_ animated: Bool) {
 }
 
 //iOS10及以下以这种方式添加的searchBar层级会在比较里面被遮挡，需要手动改变层级到最上层
-if #available(iOS 11.0, *) {
+if #available(iOS 10.0, *) {
     self.view.bringSubview(toFront: self.searchBar)
 }
 
@@ -61,27 +61,9 @@ if UIDevice.current.userInterfaceIdiom == .pad {
             self.navigationItem.leftBarButtonItem = backlButtonItem
             
             if let navigationBarButtonFrame = self.navigationController?.navigationBar.frame {
-                self.searchBar.alpha = 0.0
-                
-                CATransaction.begin()
-                
-                CATransaction.setCompletionBlock({
-                    DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.25, execute: {
-                        UIView.animate(withDuration: 0.4, animations: {
-                            self.searchBar.alpha = 1.0
-                        })
-                    })
-                })
-                
-                UIView.animate(withDuration: 0.1, animations: {
-                    self.searchBar.frame = CGRect(x: self.backButton.frame.size.width + 30.0, y: (navigationBarButtonFrame.size.height - self.cancelButton.frame.size.height) / 2.0, width: navigationBarButtonFrame.size.width - self.cancelButton.frame.size.width - self.backButton.frame.size.width - 60.0, height: self.cancelButton.frame.size.height)
-                    self.navigationController?.navigationBar.addSubview(self.searchBar)
-                })
-                
-                CATransaction.commit()
+                self.searchBar.frame = CGRect(x: self.backButton.frame.size.width + 30.0, y: (navigationBarButtonFrame.size.height - self.cancelButton.frame.size.height) / 2.0, width: navigationBarButtonFrame.size.width - self.cancelButton.frame.size.width - self.backButton.frame.size.width - 60.0, height: self.cancelButton.frame.size.height)
+                self.navigationItem.titleView = self.searchBar
             }
-        } else {
-            self.navigationItem.rightBarButtonItem = nil
         }
 ```
 
@@ -95,23 +77,4 @@ override func viewDidLayoutSubviews() {
     }
 ```
 
-#### 处理界面psuh或present到其他界面
-```
-override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        if !self.searchBar.isHidden {
-            UIView.animate(withDuration: 0.3, animations: {
-                self.searchBar.isHidden = true
-            })
-        }
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        if self.searchBar.isHidden {
-            UIView.animate(withDuration: 0.3, animations: {
-                self.searchBar.isHidden = false
-            })
-        }
-    }
-```
+#### 不过这种方式在界面切换时会有UI小问题.
